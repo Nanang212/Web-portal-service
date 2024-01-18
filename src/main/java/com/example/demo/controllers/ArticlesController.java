@@ -55,4 +55,11 @@ public class ArticlesController {
         articlesService.deleteArticle(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/{articleId}/categories/{categoryId}")
+    public ResponseEntity<Void> connectArticleWithCategory(@PathVariable Integer articleId,
+                                                           @PathVariable Integer categoryId) {
+        articlesService.connectArticleWithCategories(articleId, categoryId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

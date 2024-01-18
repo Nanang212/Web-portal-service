@@ -1,5 +1,7 @@
 package com.example.demo.models;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,5 +40,5 @@ public class Forums {
     private Forums subForum;
 
     @OneToMany(mappedBy = "forum")
-    private java.util.List<Threads> threads;
+    private List<Threads> threads;
 }

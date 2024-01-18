@@ -8,15 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.models.Article;
+import com.example.demo.models.Categories;
 import com.example.demo.models.dto.request.ArticleRequest;
 import com.example.demo.repositories.ArticlesRepository;
+import com.example.demo.repositories.CategoriesRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class ArticlesService {
     private ArticlesRepository articlesRepository;
+    private CategoriesRepository categoriesRepository;
 
     public List<Article> getAll() {
         return articlesRepository.findAll();
@@ -66,4 +70,18 @@ public class ArticlesService {
         Article existingArticle = findById(id);
         articlesRepository.delete(existingArticle);
     }
+
+    @Transactional
+    public void connectArticleWithCategories(Integer articleId, Integer categoryId) {
+        Article article = articlesRepository.findById(articleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Article id is not found"));
+        Categories category = categoriesRepository.findById(categoryId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categories id is not found"));
+
+        // Cek apakah artikel sudah memiliki kategori ini
+        if (!article.getCategories().contains(category)) {
+            article.getCategories().add(category);
+        }
+    }
+
 }
